@@ -1,0 +1,36 @@
+# The name of the bundle. run `databricks bundle schema` to see the full bundle settings schema.
+bundle:
+  name: rrx-mlops-demo
+
+variables:
+  experiment_name:
+    description: Experiment name for the model training.
+    default: /Users/${workspace.current_user.userName}/${bundle.target}-rrx-mlops-demo-experiment
+  model_name:
+    description: Model name for the model training.
+    default: rrx-mlops-demo-model
+
+include:
+  # Resources folder contains ML artifact resources for the ML project that defines model and experiment
+  # And workflows resources for the ML project including model training -> validation -> deployment,
+  # feature engineering,  batch inference, data monitoring, metric refresh, alerts and triggering retraining
+  - ./resources/*.yml
+
+# Deployment Target specific values for workspace
+targets:
+  dev_26:  # UC Catalog Name
+    default: true
+    workspace:
+      host: https://adb-5244601605601666.6.azuredatabricks.net/
+
+  staging_26:
+    workspace:
+      host: https://adb-5244601605601666.6.azuredatabricks.net/
+
+  prod:
+    workspace:
+      host: https://adb-5244601605601666.6.azuredatabricks.net/
+
+  test_26:
+    workspace:
+      host: https://adb-5244601605601666.6.azuredatabricks.net/
