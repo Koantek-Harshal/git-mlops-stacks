@@ -1,0 +1,7 @@
+1. If its an Azure workspace you need a Service Principle with the following creds:
+    a. Tenant ID
+    b. Application ID
+    c. Client Secret
+Also make sure that the Service Principle has all the accesses to the workspace you are working on.
+
+2. Linter yml needs to have all lints to versions >= 3 (Checkout, python and java)

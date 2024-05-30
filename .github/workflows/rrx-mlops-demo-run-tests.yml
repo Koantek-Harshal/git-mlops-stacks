@@ -22,12 +22,17 @@ jobs:
   unit_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - name: local-fix
+        run: |
+          if [ ! -f "/etc/lsb-release" ] ; then
+            echo "DISTRIB_RELEASE=18.04" > /etc/lsb-release
+          fi
+      - uses: actions/setup-python@v5
         with:
           python-version: 3.8
       # Feature store tests bring up a local Spark session, so Java is required.
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -50,16 +55,16 @@ jobs:
       - name: Validate Bundle For Test Deployment Target in Staging Workspace
         id: validate
         run: |
-          databricks bundle validate -t test
+          databricks bundle validate -t test_26
       - name: Deploy Bundle to Test Deployment Target in Staging Workspace
         id: deploy
         run: |
-          databricks bundle deploy -t test
+          databricks bundle deploy -t test_26
       - name: Run Feature Engineering Workflow for Test Deployment Target in Staging Workspace
         id: feature_engineering
         run: |
-          databricks bundle run write_feature_table_job -t test
+          databricks bundle run write_feature_table_job -t test_26
       - name: Run Training Workflow for Test Deployment Target in Staging Workspace
         id: training
         run: |
-          databricks bundle run model_training_job -t test
+          databricks bundle run model_training_job -t test_26
